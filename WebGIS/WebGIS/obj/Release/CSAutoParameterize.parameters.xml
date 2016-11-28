@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Connection String used in web.config by the application to access the database." defaultValue="Server=gisclass.ctuzuc4ucw1k.us-west-2.rds.amazonaws.com;Port=5432;Database=webgis;User Id=sa;Password=!23456789;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\lalch\\Documents\\GIT\\WebGIS-FinalProject\\WebGIS\\WebGIS\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+  </parameter>
+  <parameter name="WebGIS.Models.ApplicationDbContext-Web.config Connection String" description="WebGIS.Models.ApplicationDbContext Connection String used in web.config by the application to access the database." defaultValue="WebGIS.Models.ApplicationDbContext_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\lalch\\Documents\\GIT\\WebGIS-FinalProject\\WebGIS\\WebGIS\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='WebGIS.Models.ApplicationDbContext']/@connectionString" />
+  </parameter>
+</parameters>
