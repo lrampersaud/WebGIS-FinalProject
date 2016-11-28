@@ -23,6 +23,9 @@ namespace WebGIS.Models
 
         public double rating { get; set; }
 
+        public int upVotes { get; set; }
+        public int downVotes { get; set; }
+
         public Location()
         {
             ratingList=new List<Rating>();

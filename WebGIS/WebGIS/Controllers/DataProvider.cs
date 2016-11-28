@@ -31,7 +31,7 @@ namespace WebGIS.Controllers
         public List<Location> GetCloseLocations(double lat, double lng, int count)
         {
             string sqlStatement =
-                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, st_distance(ST_GeomFromText('POINT({lat} {lng})',4326), geom) as distance " +
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, st_distance(ST_GeomFromText('POINT({lat} {lng})',4326), geom) as distance, upVote, downVote " +
                 $"from public.bathrooms " +
                 $"order by distance limit {count}";
             List<Location>locations = new List<Location>();
@@ -50,7 +50,9 @@ namespace WebGIS.Controllers
                     borough=reader[5].ToString(),
                     openYearRound = Convert.ToBoolean(reader[6]),
                     handicap = Convert.ToBoolean(reader[7]),
-                    distance = Convert.ToDouble(reader[8])
+                    distance = Convert.ToDouble(reader[8]),
+                    upVotes = Convert.ToInt32(reader[9]),
+                    downVotes = Convert.ToInt32(reader[10])
                 });
             }
             reader.Close();
@@ -63,7 +65,7 @@ namespace WebGIS.Controllers
         public Location GetBathroom(int id)
         {
             string sqlStatement =
-                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap " +
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, upVote, downVote " +
                 $"from public.bathrooms " +
                 $"where id={id}";
 
@@ -83,7 +85,9 @@ namespace WebGIS.Controllers
                     borough = reader[5].ToString(),
                     openYearRound = Convert.ToBoolean(reader[6]),
                     handicap = Convert.ToBoolean(reader[7]),
-                    distance = 0d
+                    distance = 0d,
+                    upVotes = Convert.ToInt32(reader[8]),
+                    downVotes = Convert.ToInt32(reader[9])
                 };
             }
             reader.Close();
@@ -107,6 +111,28 @@ namespace WebGIS.Controllers
             conn.Close();
             
             return location;
+        }
+
+
+        public void Vote(int location_id, bool upVote)
+        {
+            string sqlStatement =
+                    $"update public.bathrooms " +
+                    $"set upVotes=isnull(upVotes, 0) + 1 " +
+                    $"where id={location_id}";
+
+            if (!upVote)
+            {
+                sqlStatement =
+                    $"update public.bathrooms " +
+                    $"set downVotes=isnull(downVotes, 0) + 1 " +
+                    $"where id={location_id}";
+            }
+            conn.Open();
+
+            SqlDataQueryEngine.ExecuteNonQuery(conn, sqlStatement);
+
+            conn.Close();
         }
 
 
