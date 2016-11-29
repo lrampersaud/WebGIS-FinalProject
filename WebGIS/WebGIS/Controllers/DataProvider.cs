@@ -32,7 +32,7 @@ namespace WebGIS.Controllers
         public List<Location> GetCloseLocations(double lat, double lng, int count)
         {
             string sqlStatement =
-                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, st_distance(ST_GeomFromText('POINT({lat} {lng})',2263), geom) as distance, upVote, downVote " +
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, st_distance(ST_GeomFromText('POINT({lat} {lng})',2263), geom) as distance, upVote, downVote, location " +
                 $"from public.bathrooms " +
                 $"order by distance limit {count}";
             List<Location> locations = new List<Location>();
@@ -53,7 +53,8 @@ namespace WebGIS.Controllers
                     handicap = Convert.ToBoolean(reader[7]),
                     distance = Convert.ToDouble(reader[8]),
                     upVotes = Convert.ToInt32(reader[9]),
-                    downVotes = Convert.ToInt32(reader[10])
+                    downVotes = Convert.ToInt32(reader[10]),
+                    location = reader[11].ToString()
                 });
             }
             reader.Close();
