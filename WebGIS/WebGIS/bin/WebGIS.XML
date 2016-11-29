@@ -531,12 +531,19 @@
             <param name="id">id of the bathroo</param>
             <param name="rating">rating information</param>
         </member>
-        <member name="M:WebGIS.Controllers.VoteController.Put(System.Int32,System.Boolean)">
+        <member name="M:WebGIS.Controllers.VoteController.Post(WebGIS.Models.VoteModel)">
             <summary>
             call this to up or down vote a bathroom
             </summary>
             <param name="id">id of the bathroom</param>
             <param name="upVote">parameter name: upVote. true or false. true to upvote and false to downvote</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebGIS.Controllers.VoteController.Put(WebGIS.Models.VoteModel)">
+            <summary>
+            call this to up or down vote a bathroom
+            </summary>
+            <param name="upvote"></param>
             <returns></returns>
         </member>
         <member name="P:WebGIS.Models.Rating.description">
@@ -547,6 +554,16 @@
         <member name="P:WebGIS.Models.Rating.starRating">
             <summary>
             star rating value 1-5
+            </summary>
+        </member>
+        <member name="P:WebGIS.Models.VoteModel.upvote">
+            <summary>
+            true to upvote
+            </summary>
+        </member>
+        <member name="P:WebGIS.Models.VoteModel.id">
+            <summary>
+            bathroom id
             </summary>
         </member>
     </members>
