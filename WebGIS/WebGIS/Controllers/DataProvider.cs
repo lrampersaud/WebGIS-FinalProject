@@ -13,10 +13,11 @@ namespace WebGIS.Controllers
     {
         private string _connectionString;
         private NpgsqlConnection conn;
+
         public DataProvider()
         {
             _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
-            conn= new NpgsqlConnection(_connectionString);
+            conn = new NpgsqlConnection(_connectionString);
         }
 
         ~DataProvider()
@@ -31,23 +32,23 @@ namespace WebGIS.Controllers
         public List<Location> GetCloseLocations(double lat, double lng, int count)
         {
             string sqlStatement =
-                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, st_distance(ST_GeomFromText('POINT({lat} {lng})',4326), geom) as distance, upVote, downVote " +
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, st_distance(ST_GeomFromText('POINT({lat} {lng})',2263), geom) as distance, upVote, downVote " +
                 $"from public.bathrooms " +
                 $"order by distance limit {count}";
-            List<Location>locations = new List<Location>();
+            List<Location> locations = new List<Location>();
             conn.Open();
-            
+
             NpgsqlDataReader reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
             while (reader.Read())
             {
                 locations.Add(new Location
                 {
-                    id=Convert.ToInt32(reader[0]),
-                    name=reader[1].ToString(),
+                    id = Convert.ToInt32(reader[0]),
+                    name = reader[1].ToString(),
                     latitude = Convert.ToDouble(reader[2]),
                     longitude = Convert.ToDouble(reader[3]),
-                    image=reader[4].ToString(),
-                    borough=reader[5].ToString(),
+                    image = reader[4].ToString(),
+                    borough = reader[5].ToString(),
                     openYearRound = Convert.ToBoolean(reader[6]),
                     handicap = Convert.ToBoolean(reader[7]),
                     distance = Convert.ToDouble(reader[8]),
@@ -60,12 +61,44 @@ namespace WebGIS.Controllers
             return locations;
         }
 
+        public List<Location> GetAllLocations()
+        {
+            string sqlStatement =
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location " +
+                $"from public.bathrooms";
+            List<Location> locations = new List<Location>();
+            conn.Open();
+
+            NpgsqlDataReader reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
+            while (reader.Read())
+            {
+                locations.Add(new Location
+                {
+                    id = Convert.ToInt32(reader[0]),
+                    name = reader[1].ToString(),
+                    latitude = Convert.ToDouble(reader[2]),
+                    longitude = Convert.ToDouble(reader[3]),
+                    image = reader[4].ToString(),
+                    borough = reader[5].ToString(),
+                    openYearRound = Convert.ToBoolean(reader[6]),
+                    handicap = Convert.ToBoolean(reader[7]),
+                    distance = Convert.ToDouble(reader[8]),
+                    upVotes = Convert.ToInt32(reader[9]),
+                    downVotes = Convert.ToInt32(reader[10]),
+                    location = reader[11].ToString()
+                });
+            }
+            reader.Close();
+            conn.Close();
+            return locations;
+        }
+
 
 
         public Location GetBathroom(int id)
         {
             string sqlStatement =
-                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, upVote, downVote " +
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, upVote, downVote, location " +
                 $"from public.bathrooms " +
                 $"where id={id}";
 
@@ -87,7 +120,8 @@ namespace WebGIS.Controllers
                     handicap = Convert.ToBoolean(reader[7]),
                     distance = 0d,
                     upVotes = Convert.ToInt32(reader[8]),
-                    downVotes = Convert.ToInt32(reader[9])
+                    downVotes = Convert.ToInt32(reader[9]),
+                    location = reader[10].ToString()
                 };
             }
             reader.Close();
@@ -96,20 +130,20 @@ namespace WebGIS.Controllers
                            $"from public.ratings " +
                            $"where location_id={0}";
             reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
-            while(reader.Read())
+            while (reader.Read())
             {
                 location.ratingList.Add(new Rating
                 {
-                    id=Convert.ToInt32(reader[0]),
+                    id = Convert.ToInt32(reader[0]),
                     location_id = Convert.ToInt32(reader[1]),
                     description = reader[2].ToString(),
                     starRating = Convert.ToInt32(reader[3])
                 });
             }
             reader.Close();
-            
+
             conn.Close();
-            
+
             return location;
         }
 
@@ -117,9 +151,9 @@ namespace WebGIS.Controllers
         public void Vote(int location_id, bool upVote)
         {
             string sqlStatement =
-                    $"update public.bathrooms " +
-                    $"set upVotes=isnull(upVotes, 0) + 1 " +
-                    $"where id={location_id}";
+                $"update public.bathrooms " +
+                $"set upVotes=isnull(upVotes, 0) + 1 " +
+                $"where id={location_id}";
 
             if (!upVote)
             {
@@ -135,6 +169,76 @@ namespace WebGIS.Controllers
             conn.Close();
         }
 
+
+        public List<Rating> GetAllRatingsForBathroom(int id)
+        {
+            List<Rating> ratings = new List<Rating>();
+            string sqlStatement = $"select id, location_id, description, starrating " +
+                                  $"from public.ratings " +
+                                  $"where location_id={0}";
+            NpgsqlDataReader reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
+            while (reader.Read())
+            {
+                ratings.Add(new Rating
+                {
+                    id = Convert.ToInt32(reader[0]),
+                    location_id = Convert.ToInt32(reader[1]),
+                    description = reader[2].ToString(),
+                    starRating = Convert.ToInt32(reader[3])
+                });
+            }
+            reader.Close();
+
+            conn.Close();
+            return ratings;
+        }
+
+        public Rating GetRating(int id)
+        {
+            Rating rating = new Rating();
+            string sqlStatement = $"select id, location_id, description, starrating " +
+                                  $"from public.ratings " +
+                                  $"where id={0}";
+            NpgsqlDataReader reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
+            while (reader.Read())
+            {
+                rating = new Rating
+                {
+                    id = Convert.ToInt32(reader[0]),
+                    location_id = Convert.ToInt32(reader[1]),
+                    description = reader[2].ToString(),
+                    starRating = Convert.ToInt32(reader[3])
+                };
+            }
+            reader.Close();
+
+            conn.Close();
+            return rating;
+        }
+
+
+        public bool InsertRating(Rating rating)
+        {
+
+            try
+            {
+                conn.Open();
+                string sqlStatement = $"insert int public.ratings(location_id, description, starRating) " +
+                                      $"values({rating.location_id}, '{rating.description.Replace("'", "''")}', {rating.starRating})";
+                SqlDataQueryEngine.ExecuteNonQuery(conn, sqlStatement);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+
+            return true;
+        }
 
 
 

@@ -15,6 +15,18 @@ namespace WebGIS.Controllers
 
         // GET: api/Bathroom
         /// <summary>
+        /// Call this to get all bathrooms
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Location> Get()
+        {
+            DataProvider provider = new DataProvider();
+            return provider.GetAllLocations();
+        }
+
+
+
+        /// <summary>
         /// Send latitude and longitude to  obtain public restrooms
         /// </summary>
         /// <param name="Latitude">your current latutide</param>
@@ -28,6 +40,11 @@ namespace WebGIS.Controllers
 
         }
         // GET: api/Bathroom/5
+        /// <summary>
+        /// Call this to get a specific bathroom
+        /// </summary>
+        /// <param name="id">send the bathroom id</param>
+        /// <returns></returns>
         public Location Get(int id)
         {
             DataProvider provider = new DataProvider();

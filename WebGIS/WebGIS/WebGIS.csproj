@@ -35,7 +35,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>App_Data\WebGIS.XML</DocumentationFile>
+    <DocumentationFile>xml\WebGIS.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -300,6 +300,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="xml\WebGIS.XML" />
     <None Include="Properties\PublishProfiles\WebGIS20161127031804 - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\WebGIS20161127031804 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\work web deploy.pubxml" />

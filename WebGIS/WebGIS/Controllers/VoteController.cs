@@ -11,6 +11,12 @@ namespace WebGIS.Controllers
     {
 
         // PUT: api/Vote/5
+        /// <summary>
+        /// call this to up or down vote a bathroom
+        /// </summary>
+        /// <param name="id">id of the bathroom</param>
+        /// <param name="upVote">parameter name: upVote. true or false. true to upvote and false to downvote</param>
+        /// <returns></returns>
         public bool Put(int id, [FromBody] bool upVote)
         {
             DataProvider provider = new DataProvider();

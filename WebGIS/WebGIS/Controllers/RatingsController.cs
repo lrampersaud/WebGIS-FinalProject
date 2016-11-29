@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.WebSockets;
@@ -14,34 +15,35 @@ namespace WebGIS.Controllers
     {
         // GET: api/Ratings
         /// <summary>
-        /// get al ratings for bathroom
+        /// get all ratings for bathroom
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="Id">id of the bathroom</param>
         /// <returns></returns>
         public IEnumerable<Rating> Get(int id)
         {
-            List<Rating> ratings = new List<Rating>();
-            return ratings;
+            DataProvider provider=new DataProvider();
+            return provider.GetAllRatingsForBathroom(id);
         }
 
         // GET: api/Ratings/5
         /// <summary>
-        /// Get a specific rating
+        /// Get a specific rating. 2 parameters because i can't use 1 again
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="bathroom_id"></param>
+        /// <param name="id">rating id</param>
+        /// <param name="bathroom_id">bathroom id</param>
         /// <returns></returns>
         public Rating Get(int id, int bathroom_id)
         {
-            Rating rating = new Rating();
-            return rating;
+            DataProvider provider = new DataProvider();
+            return provider.GetRating(id);
         }
 
         // POST: api/Ratings
         /// <summary>
         /// Update a rating
         /// </summary>
-        /// <param name="rating"></param>
+        /// <param name="rating">rating information</param>
+         [ApiExplorerSettings(IgnoreApi = true)]
         public void Post([FromBody]Rating rating)
         {
         }
@@ -50,10 +52,13 @@ namespace WebGIS.Controllers
         /// <summary>
         /// insert a rating
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="rating"></param>
-        public void Put([FromBody]Rating rating)
+        /// <param name="id">id of the bathroo</param>
+        /// <param name="rating">rating information</param>
+        public bool Put([FromBody]Rating rating)
         {
+            rating.description = HttpUtility.HtmlEncode(rating.description);
+            DataProvider provider = new DataProvider();
+            return provider.InsertRating(rating);
         }
 
         // DELETE: api/Ratings/5
