@@ -8,6 +8,7 @@ namespace WebGIS
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            filters.Add(new AiHandleErrorAttribute());
             filters.Add(new HandleErrorAttribute());
             filters.Add((new AddCustomHeaderFilter()));
         }
