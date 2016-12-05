@@ -496,11 +496,55 @@
             <param name="AmountBathrooms">max number of bathrooms to return</param>
             <returns></returns>
         </member>
+        <member name="M:WebGIS.Controllers.BathroomController.Get(System.Double,System.Double,System.Int32,System.Int32)">
+            <summary>
+            Get bathrooms by star rating ordered by closest
+            </summary>
+            <param name="latitude"></param>
+            <param name="longitude"></param>
+            <param name="stars">star rating required</param>
+            <param name="amountBathrooms"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebGIS.Controllers.BathroomController.Get(System.Double,System.Double,System.Int32,System.Char)">
+            <summary>
+            get all bathrooms within a radius ordered by distance
+            </summary>
+            <param name="latitude"></param>
+            <param name="longitude"></param>
+            <param name="stars"></param>
+            <param name="radius"></param>
+            <param name="action">pass 'R' here</param>
+            <returns></returns>
+        </member>
         <member name="M:WebGIS.Controllers.BathroomController.Get(System.Int32)">
             <summary>
             Call this to get a specific bathroom
             </summary>
             <param name="id">send the bathroom id</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebGIS.Controllers.BathroomController.Get(System.Double,System.Double,System.Double,System.Double,System.Int32,System.Int32)">
+            <summary>
+            Get bathrooms within a bounding box having a star rating 
+             </summary>
+            <param name="northEastBoundLatitude"></param>
+            <param name="northEastBoundLongitude"></param>
+            <param name="southWestBoundLatitude"></param>
+            <param name="southWestBoundLongitude"></param>
+            <param name="stars">star rating required</param>
+            <param name="amountBathrooms">number of bathrooms with that star rating</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebGIS.Controllers.BathroomController.Get(System.Double,System.Double,System.Double,System.Double,System.Int32)">
+            <summary>
+            Get all bathrooms within a bounding box ordered by rating
+            </summary>
+            <param name="northEastBoundLatitude">Y1</param>
+            <param name="northEastBoundLongitude">X1</param>
+            <param name="southWestBoundLatitude">Y2</param>
+            <param name="southWestBoundLongitude">X2</param>
+            <param name="amountBathrooms"></param>
             <returns></returns>
         </member>
         <member name="M:WebGIS.Controllers.BathroomController.Post(WebGIS.Models.BathroomsInBoundingBox)">
@@ -571,6 +615,11 @@
         <member name="P:WebGIS.Models.BathroomsInBoundingBox.southWestBoundLongitude">
             <summary>
             bottom X
+            </summary>
+        </member>
+        <member name="P:WebGIS.Models.BathroomsInBoundingBox.amountBathrooms">
+            <summary>
+            Number of bathrooms
             </summary>
         </member>
         <member name="P:WebGIS.Models.Rating.description">

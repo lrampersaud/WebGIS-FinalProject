@@ -40,6 +40,37 @@ namespace WebGIS.Controllers
             return provider.GetCloseLocations(latitude, longitude, amountBathrooms);
 
         }
+
+        /// <summary>
+        /// Get bathrooms by star rating ordered by closest
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="stars">star rating required</param>
+        /// <param name="amountBathrooms"></param>
+        /// <returns></returns>
+        public IEnumerable<Location> Get(double latitude, double longitude, int stars, int amountBathrooms)
+        {
+            DataProvider provider = new DataProvider();
+            return provider.GetLocationsByStarsOrderedBydistance(latitude, longitude, stars, amountBathrooms);
+        }
+
+        /// <summary>
+        /// get all bathrooms within a radius (Km) ordered by distance
+        /// </summary>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="stars"></param>
+        /// <param name="radius"></param>
+        /// <param name="action">pass 'R' here</param>
+        /// <returns></returns>
+        public IEnumerable<Location> Get(double latitude, double longitude, int radius, char action)
+        {
+            DataProvider provider = new DataProvider();
+            return provider.GetBathroomsWithinRadius(latitude, longitude, radius);
+        }
+
+
         // GET: api/Bathroom/5
         /// <summary>
         /// Call this to get a specific bathroom
@@ -52,6 +83,53 @@ namespace WebGIS.Controllers
             return provider.GetBathroom(id);
         }
 
+        /// <summary>
+        /// Get bathrooms within a bounding box having a star rating (android version)
+        ///  </summary>
+        /// <param name="northEastBoundLatitude"></param>
+        /// <param name="northEastBoundLongitude"></param>
+        /// <param name="southWestBoundLatitude"></param>
+        /// <param name="southWestBoundLongitude"></param>
+        /// <param name="stars">star rating required</param>
+        /// <param name="amountBathrooms">number of bathrooms with that star rating</param>
+        /// <returns></returns>
+        public IEnumerable<Location> Get(double northEastBoundLatitude, double northEastBoundLongitude, double southWestBoundLatitude, double southWestBoundLongitude, int stars, int amountBathrooms)
+        {
+            BathroomsInBoundingBox entity = new BathroomsInBoundingBox
+            {
+                southWestBoundLongitude = southWestBoundLongitude,
+                southWestBoundLatitude = southWestBoundLatitude,
+                amountBathrooms = amountBathrooms,
+                northEastBoundLongitude = northEastBoundLongitude,
+                northEastBoundLatitude = northEastBoundLongitude
+            };
+            DataProvider provider = new DataProvider();
+            return provider.GetAllLocationsWithinBoundingBoxByStars(entity, stars);
+        }
+
+
+        /// <summary>
+        /// Get all bathrooms within a bounding box ordered by VOTING rating (web only)
+        /// </summary>
+        /// <param name="northEastBoundLatitude">Y1</param>
+        /// <param name="northEastBoundLongitude">X1</param>
+        /// <param name="southWestBoundLatitude">Y2</param>
+        /// <param name="southWestBoundLongitude">X2</param>
+        /// <param name="amountBathrooms"></param>
+        /// <returns></returns>
+        public IEnumerable<Location> Get(double northEastBoundLatitude, double northEastBoundLongitude, double southWestBoundLatitude, double southWestBoundLongitude, int amountBathrooms)
+        {
+            BathroomsInBoundingBox entity = new BathroomsInBoundingBox
+            {
+                southWestBoundLongitude = southWestBoundLongitude,
+                southWestBoundLatitude = southWestBoundLatitude,
+                amountBathrooms = amountBathrooms,
+                northEastBoundLongitude = northEastBoundLongitude,
+                northEastBoundLatitude = northEastBoundLongitude
+            };
+            DataProvider provider = new DataProvider();
+            return provider.GetAllLocationsWithinBoundingBox(entity);
+        }
 
         /// <summary>
         /// Get all bathrooms within a bounding box ordered by rating
@@ -59,7 +137,7 @@ namespace WebGIS.Controllers
         /// <param name="entity"></param>
         /// <returns></returns>
         [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public IEnumerable<Location> Post([FromBody] BathroomsInBoundingBox entity)
+        public IEnumerable<Location> Post([FromBody]BathroomsInBoundingBox entity)
         {
             DataProvider provider = new DataProvider();
             return provider.GetAllLocationsWithinBoundingBox(entity);

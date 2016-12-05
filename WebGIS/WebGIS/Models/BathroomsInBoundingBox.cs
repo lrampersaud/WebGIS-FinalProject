@@ -10,22 +10,26 @@ namespace WebGIS.Models
         /// <summary>
         /// top Y
         /// </summary>
-        public string northEastBoundLatitude { get; set; }
+        public double northEastBoundLatitude { get; set; }
 
         /// <summary>
         /// top X
         /// </summary>
-        public string northEastBoundLongitude { get; set; }
+        public double northEastBoundLongitude { get; set; }
 
         /// <summary>
         /// bottom Y
         /// </summary>
-        public string southWestBoundLatitude { get; set; }
+        public double southWestBoundLatitude { get; set; }
 
         /// <summary>
         /// bottom X
         /// </summary>
-        public string southWestBoundLongitude { get; set; }
+        public double southWestBoundLongitude { get; set; }
+
+        /// <summary>
+        /// Number of bathrooms
+        /// </summary>
         public int amountBathrooms { get; set; }
     }
 }

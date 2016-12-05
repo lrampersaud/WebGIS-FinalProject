@@ -281,7 +281,117 @@ namespace WebGIS.Controllers
             return locations;
         }
 
+        public List<Location> GetAllLocationsWithinBoundingBoxByStars(BathroomsInBoundingBox entity, int stars)
+        {
+            string sqlStatement =
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location, coalesce((select avg(starrating) from ratings where location_id=bath.id),0) as stars " +
+                $"from public.bathrooms bath " +
+                $"where round(coalesce((select avg(starrating) from ratings where location_id=bath.id),0))={stars} and " +
+                $"st_contains(ST_GeomFromText('POLYGON(({entity.northEastBoundLongitude} {entity.northEastBoundLatitude}," +
+                $"{entity.northEastBoundLongitude} {entity.southWestBoundLatitude}," +
+                $"{entity.southWestBoundLongitude} {entity.northEastBoundLatitude}," +
+                $"{entity.southWestBoundLongitude} {entity.southWestBoundLatitude}," +
+                $"{entity.northEastBoundLongitude} {entity.northEastBoundLatitude}))',2263), geom) " +
+                $"order by stars" +
+                $"limit {entity.amountBathrooms}";
+            List<Location> locations = new List<Location>();
+            conn.Open();
 
+            NpgsqlDataReader reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
+            while (reader.Read())
+            {
+                locations.Add(new Location
+                {
+                    id = Convert.ToInt32(reader[0]),
+                    name = reader[1].ToString(),
+                    latitude = Convert.ToDouble(reader[2]),
+                    longitude = Convert.ToDouble(reader[3]),
+                    image = reader[4].ToString(),
+                    borough = reader[5].ToString(),
+                    openYearRound = Convert.ToBoolean(reader[6]),
+                    handicap = Convert.ToBoolean(reader[7]),
+                    distance = Convert.ToDouble(reader[8]),
+                    upVotes = Convert.ToInt32(reader[9]),
+                    downVotes = Convert.ToInt32(reader[10]),
+                    location = reader[11].ToString(),
+                    rating = Convert.ToDouble(reader[12])
+                });
+            }
+            reader.Close();
+            conn.Close();
+
+            return locations;
+        }
+
+        public List<Location> GetLocationsByStarsOrderedBydistance(double latitude, double longitude, int stars, int amountBathrooms)
+        {
+            string sqlStatement =
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, st_distance(ST_GeomFromText('POINT({longitude} {latitude})',2263), geom) as distance, upVote, downVote, location " +
+                $"from public.bathrooms " +
+                $"where round(coalesce((select avg(starrating) from ratings where location_id=bath.id),0))={stars} " +
+                $"order by distance" +
+                $"limit {amountBathrooms}";
+            List<Location> locations = new List<Location>();
+            conn.Open();
+
+            NpgsqlDataReader reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
+            while (reader.Read())
+            {
+                locations.Add(new Location
+                {
+                    id = Convert.ToInt32(reader[0]),
+                    name = reader[1].ToString(),
+                    latitude = Convert.ToDouble(reader[2]),
+                    longitude = Convert.ToDouble(reader[3]),
+                    image = reader[4].ToString(),
+                    borough = reader[5].ToString(),
+                    openYearRound = Convert.ToBoolean(reader[6]),
+                    handicap = Convert.ToBoolean(reader[7]),
+                    distance = Convert.ToDouble(reader[8]),
+                    upVotes = Convert.ToInt32(reader[9]),
+                    downVotes = Convert.ToInt32(reader[10]),
+                    location = reader[11].ToString()
+                });
+            }
+            reader.Close();
+            conn.Close();
+            return locations;
+        }
+
+        public List<Location> GetBathroomsWithinRadius(double lat, double lng, int radius)
+        {
+            string sqlStatement =
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, " +
+                $"st_distance(ST_GeomFromText('POINT({lng} {lat})',2263), geom) as distance, upVote, downVote, location " +
+                $"from public.bathrooms " +
+                $"where st_contains(geom, st_buffer(ST_GeomFromText('POINT({lng} {lat})',2263)))" +
+                $"order by distance";
+            List<Location> locations = new List<Location>();
+            conn.Open();
+
+            NpgsqlDataReader reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
+            while (reader.Read())
+            {
+                locations.Add(new Location
+                {
+                    id = Convert.ToInt32(reader[0]),
+                    name = reader[1].ToString(),
+                    latitude = Convert.ToDouble(reader[2]),
+                    longitude = Convert.ToDouble(reader[3]),
+                    image = reader[4].ToString(),
+                    borough = reader[5].ToString(),
+                    openYearRound = Convert.ToBoolean(reader[6]),
+                    handicap = Convert.ToBoolean(reader[7]),
+                    distance = Convert.ToDouble(reader[8]),
+                    upVotes = Convert.ToInt32(reader[9]),
+                    downVotes = Convert.ToInt32(reader[10]),
+                    location = reader[11].ToString()
+                });
+            }
+            reader.Close();
+            conn.Close();
+            return locations;
+        }
 
     }
 }
