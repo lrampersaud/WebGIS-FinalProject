@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using WebGIS.Models;
 
@@ -51,10 +52,17 @@ namespace WebGIS.Controllers
             return provider.GetBathroom(id);
         }
 
-        // POST: api/Bathroom
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public void Post([FromBody]string value)
+
+        /// <summary>
+        /// Get all bathrooms within a bounding box ordered by rating
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        public IEnumerable<Location> Post([FromBody] BathroomsInBoundingBox entity)
         {
+            DataProvider provider = new DataProvider();
+            return provider.GetAllLocationsWithinBoundingBox(entity);
         }
 
         // PUT: api/Bathroom/5

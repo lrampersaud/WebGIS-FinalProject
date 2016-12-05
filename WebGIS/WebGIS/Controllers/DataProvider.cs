@@ -242,6 +242,44 @@ namespace WebGIS.Controllers
             return true;
         }
 
+        public List<Location> GetAllLocationsWithinBoundingBox(BathroomsInBoundingBox entity)
+        {
+            string sqlStatement =
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location " +
+                $"from public.bathrooms " +
+                $"where st_contains(ST_GeomFromText('POLYGON(({entity.northEastBoundLongitude} {entity.northEastBoundLatitude}," +
+                $"{entity.northEastBoundLongitude} {entity.southWestBoundLatitude}," +
+                $"{entity.southWestBoundLongitude} {entity.northEastBoundLatitude}," +
+                $"{entity.southWestBoundLongitude} {entity.southWestBoundLatitude}," +
+                $"{entity.northEastBoundLongitude} {entity.northEastBoundLatitude}))',2263), geom)";
+            List<Location> locations = new List<Location>();
+            conn.Open();
+
+            NpgsqlDataReader reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
+            while (reader.Read())
+            {
+                locations.Add(new Location
+                {
+                    id = Convert.ToInt32(reader[0]),
+                    name = reader[1].ToString(),
+                    latitude = Convert.ToDouble(reader[2]),
+                    longitude = Convert.ToDouble(reader[3]),
+                    image = reader[4].ToString(),
+                    borough = reader[5].ToString(),
+                    openYearRound = Convert.ToBoolean(reader[6]),
+                    handicap = Convert.ToBoolean(reader[7]),
+                    distance = Convert.ToDouble(reader[8]),
+                    upVotes = Convert.ToInt32(reader[9]),
+                    downVotes = Convert.ToInt32(reader[10]),
+                    location = reader[11].ToString()
+                });
+            }
+            reader.Close();
+            conn.Close();
+            locations = locations.OrderBy(p => p.upVotes - p.downVotes).Take(entity.amountBathrooms).ToList();
+
+            return locations;
+        }
 
 
 

@@ -503,6 +503,13 @@
             <param name="id">send the bathroom id</param>
             <returns></returns>
         </member>
+        <member name="M:WebGIS.Controllers.BathroomController.Post(WebGIS.Models.BathroomsInBoundingBox)">
+            <summary>
+            Get all bathrooms within a bounding box ordered by rating
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
         <member name="M:WebGIS.Controllers.RatingsController.Get(System.Int32)">
             <summary>
             get all ratings for bathroom
@@ -545,6 +552,26 @@
             </summary>
             <param name="upvote"></param>
             <returns></returns>
+        </member>
+        <member name="P:WebGIS.Models.BathroomsInBoundingBox.northEastBoundLatitude">
+            <summary>
+            top Y
+            </summary>
+        </member>
+        <member name="P:WebGIS.Models.BathroomsInBoundingBox.northEastBoundLongitude">
+            <summary>
+            top X
+            </summary>
+        </member>
+        <member name="P:WebGIS.Models.BathroomsInBoundingBox.southWestBoundLatitude">
+            <summary>
+            bottom Y
+            </summary>
+        </member>
+        <member name="P:WebGIS.Models.BathroomsInBoundingBox.southWestBoundLongitude">
+            <summary>
+            bottom X
+            </summary>
         </member>
         <member name="P:WebGIS.Models.Rating.description">
             <summary>
