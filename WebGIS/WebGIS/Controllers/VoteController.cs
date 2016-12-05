@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using WebGIS.Models;
 
@@ -41,6 +42,7 @@ namespace WebGIS.Controllers
         /// </summary>
         /// <param name="upvote"></param>
         /// <returns></returns>
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         [HttpPut]
         public bool Put([FromBody] VoteModel upvote)
         {

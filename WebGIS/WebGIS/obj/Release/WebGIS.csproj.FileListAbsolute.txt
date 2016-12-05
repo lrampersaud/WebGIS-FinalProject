@@ -210,3 +210,6 @@ C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\System.W
 C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\obj\Release\WebGIS.csprojResolveAssemblyReference.cache
 C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\obj\Release\WebGIS.dll
 C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\obj\Release\WebGIS.pdb
+C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\System.Web.Cors.dll
+C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\System.Web.Http.Cors.dll
+C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\System.Web.Http.Cors.xml

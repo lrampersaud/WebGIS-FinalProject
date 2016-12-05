@@ -316,3 +316,6 @@ C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\Microsof
 C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\System.Web.Http.Owin.xml
+C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\System.Web.Cors.dll
+C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\System.Web.Http.Cors.dll
+C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\System.Web.Http.Cors.xml

@@ -13,6 +13,8 @@ namespace WebGIS.App_Start
         {
             base.OnActionExecuted(filterContext);
             filterContext.HttpContext.Response.AppendHeader("Access-Control-Allow-Origin", "*");
+            //filterContext.HttpContext.Response.AppendHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
+            //filterContext.HttpContext.Response.AppendHeader("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
         }
     }
 
@@ -21,6 +23,8 @@ namespace WebGIS.App_Start
         public override void OnActionExecuted(System.Web.Http.Filters.HttpActionExecutedContext actionExecutedContext)
         {
             actionExecutedContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            //actionExecutedContext.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
+            //actionExecutedContext.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
         }
     }
 }
