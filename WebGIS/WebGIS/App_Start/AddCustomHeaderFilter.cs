@@ -7,7 +7,7 @@ using System.Web.Http.Filters;
 
 namespace WebGIS.App_Start
 {
-    public class AddCustomHeaderFilter: System.Web.Mvc.ActionFilterAttribute
+    public class AddCustomHeaderFilter : System.Web.Mvc.ActionFilterAttribute
     {
         public override void OnActionExecuted(System.Web.Mvc.ActionExecutedContext filterContext)
         {
@@ -22,7 +22,14 @@ namespace WebGIS.App_Start
     {
         public override void OnActionExecuted(System.Web.Http.Filters.HttpActionExecutedContext actionExecutedContext)
         {
-            actionExecutedContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            try
+            {
+                actionExecutedContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            }
+            catch
+            {
+            }
+
             //actionExecutedContext.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
             //actionExecutedContext.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
         }

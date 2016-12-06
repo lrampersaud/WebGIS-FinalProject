@@ -101,7 +101,7 @@ namespace WebGIS.Controllers
                 southWestBoundLatitude = southWestBoundLatitude,
                 amountBathrooms = amountBathrooms,
                 northEastBoundLongitude = northEastBoundLongitude,
-                northEastBoundLatitude = northEastBoundLongitude
+                northEastBoundLatitude = northEastBoundLatitude
             };
             DataProvider provider = new DataProvider();
             return provider.GetAllLocationsWithinBoundingBoxByStars(entity, stars);
@@ -125,7 +125,7 @@ namespace WebGIS.Controllers
                 southWestBoundLatitude = southWestBoundLatitude,
                 amountBathrooms = amountBathrooms,
                 northEastBoundLongitude = northEastBoundLongitude,
-                northEastBoundLatitude = northEastBoundLongitude
+                northEastBoundLatitude = northEastBoundLatitude
             };
             DataProvider provider = new DataProvider();
             return provider.GetAllLocationsWithinBoundingBox(entity);

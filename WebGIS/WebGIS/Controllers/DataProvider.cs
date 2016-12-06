@@ -225,7 +225,7 @@ namespace WebGIS.Controllers
             try
             {
                 conn.Open();
-                string sqlStatement = $"insert int public.ratings(location_id, description, starRating) " +
+                string sqlStatement = $"insert into public.ratings(location_id, description, starrating) " +
                                       $"values({rating.location_id}, '{rating.description.Replace("'", "''")}', {rating.starRating})";
                 SqlDataQueryEngine.ExecuteNonQuery(conn, sqlStatement);
             }

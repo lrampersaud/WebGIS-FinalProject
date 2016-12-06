@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using System.Web.WebSockets;
 using WebGIS.Models;
@@ -54,6 +55,7 @@ namespace WebGIS.Controllers
         /// </summary>
         /// <param name="id">id of the bathroo</param>
         /// <param name="rating">rating information</param>
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public bool Put([FromBody]Rating rating)
         {
             rating.description = HttpUtility.HtmlEncode(rating.description);

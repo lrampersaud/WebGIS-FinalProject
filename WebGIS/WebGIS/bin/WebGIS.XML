@@ -508,7 +508,7 @@
         </member>
         <member name="M:WebGIS.Controllers.BathroomController.Get(System.Double,System.Double,System.Int32,System.Char)">
             <summary>
-            get all bathrooms within a radius ordered by distance
+            get all bathrooms within a radius (Km) ordered by distance
             </summary>
             <param name="latitude"></param>
             <param name="longitude"></param>
@@ -526,7 +526,7 @@
         </member>
         <member name="M:WebGIS.Controllers.BathroomController.Get(System.Double,System.Double,System.Double,System.Double,System.Int32,System.Int32)">
             <summary>
-            Get bathrooms within a bounding box having a star rating 
+            Get bathrooms within a bounding box having a star rating (android version)
              </summary>
             <param name="northEastBoundLatitude"></param>
             <param name="northEastBoundLongitude"></param>
@@ -538,7 +538,7 @@
         </member>
         <member name="M:WebGIS.Controllers.BathroomController.Get(System.Double,System.Double,System.Double,System.Double,System.Int32)">
             <summary>
-            Get all bathrooms within a bounding box ordered by rating
+            Get all bathrooms within a bounding box ordered by VOTING rating (web only)
             </summary>
             <param name="northEastBoundLatitude">Y1</param>
             <param name="northEastBoundLongitude">X1</param>
