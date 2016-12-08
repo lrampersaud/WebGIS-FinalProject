@@ -33,8 +33,8 @@ namespace WebGIS.Controllers
         {
             string sqlStatement =
                 $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, " +
-                $"st_distance(ST_GeomFromText('POINT({lng} {lat})',2263), geom) as distance, upVote, downVote, location " +
-                $"from public.bathrooms " +
+                $"st_distance(ST_GeomFromText('POINT({lng} {lat})',2263), geom) as distance, upVote, downVote, location, round(coalesce((select avg(starrating) from ratings where location_id=bath.id),0)) rating " +
+                $"from public.bathrooms bath " +
                 $"order by distance limit {count}";
             List<Location> locations = new List<Location>();
             conn.Open();
@@ -55,7 +55,8 @@ namespace WebGIS.Controllers
                     distance = Convert.ToDouble(reader[8]),
                     upVotes = Convert.ToInt32(reader[9]),
                     downVotes = Convert.ToInt32(reader[10]),
-                    location = reader[11].ToString()
+                    location = reader[11].ToString(),
+                    rating= Convert.ToDouble(reader[12])
                 });
             }
             reader.Close();
@@ -66,8 +67,8 @@ namespace WebGIS.Controllers
         public List<Location> GetAllLocations()
         {
             string sqlStatement =
-                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location " +
-                $"from public.bathrooms";
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location, round(coalesce((select avg(starrating) from ratings where location_id=bath.id),0)) rating " +
+                $"from public.bathrooms bath";
             List<Location> locations = new List<Location>();
             conn.Open();
 
@@ -87,7 +88,8 @@ namespace WebGIS.Controllers
                     distance = Convert.ToDouble(reader[8]),
                     upVotes = Convert.ToInt32(reader[9]),
                     downVotes = Convert.ToInt32(reader[10]),
-                    location = reader[11].ToString()
+                    location = reader[11].ToString(),
+                    rating = Convert.ToDouble(reader[12])
                 });
             }
             reader.Close();
@@ -100,8 +102,8 @@ namespace WebGIS.Controllers
         public Location GetBathroom(int id)
         {
             string sqlStatement =
-                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, upVote, downVote, location " +
-                $"from public.bathrooms " +
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, upVote, downVote, location, round(coalesce((select avg(starrating) from ratings where location_id=bath.id),0)) rating " +
+                $"from public.bathrooms bath " +
                 $"where id={id}";
 
             Location location = new Location();
@@ -123,7 +125,8 @@ namespace WebGIS.Controllers
                     distance = 0d,
                     upVotes = Convert.ToInt32(reader[8]),
                     downVotes = Convert.ToInt32(reader[9]),
-                    location = reader[10].ToString()
+                    location = reader[10].ToString(),
+                    rating = Convert.ToDouble(reader[11])
                 };
             }
             reader.Close();
@@ -245,8 +248,8 @@ namespace WebGIS.Controllers
         public List<Location> GetAllLocationsWithinBoundingBox(BathroomsInBoundingBox entity)
         {
             string sqlStatement =
-                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location " +
-                $"from public.bathrooms " +
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location, round(coalesce((select avg(starrating) from ratings where location_id=bath.id),0)) rating " +
+                $"from public.bathrooms bath " +
                 $"where st_contains(ST_GeomFromText('POLYGON(({entity.northEastBoundLongitude} {entity.northEastBoundLatitude}," +
                 $"{entity.northEastBoundLongitude} {entity.southWestBoundLatitude}," +
                 $"{entity.southWestBoundLongitude} {entity.northEastBoundLatitude}," +
@@ -271,7 +274,8 @@ namespace WebGIS.Controllers
                     distance = Convert.ToDouble(reader[8]),
                     upVotes = Convert.ToInt32(reader[9]),
                     downVotes = Convert.ToInt32(reader[10]),
-                    location = reader[11].ToString()
+                    location = reader[11].ToString(),
+                    rating = Convert.ToDouble(reader[12])
                 });
             }
             reader.Close();
@@ -284,7 +288,8 @@ namespace WebGIS.Controllers
         public List<Location> GetAllLocationsWithinBoundingBoxByStars(BathroomsInBoundingBox entity, int stars)
         {
             string sqlStatement =
-                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location, coalesce((select avg(starrating) from ratings where location_id=bath.id),0) as stars " +
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location, " +
+                $"coalesce((select avg(starrating) from ratings where location_id=bath.id),0) rating " +
                 $"from public.bathrooms bath " +
                 $"where round(coalesce((select avg(starrating) from ratings where location_id=bath.id),0))={stars} and " +
                 $"st_contains(ST_GeomFromText('POLYGON(({entity.northEastBoundLongitude} {entity.northEastBoundLatitude}," +
@@ -326,8 +331,9 @@ namespace WebGIS.Controllers
         public List<Location> GetLocationsByStarsOrderedBydistance(double latitude, double longitude, int stars, int amountBathrooms)
         {
             string sqlStatement =
-                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, st_distance(ST_GeomFromText('POINT({longitude} {latitude})',2263), geom) as distance, upVote, downVote, location " +
-                $"from public.bathrooms " +
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, " +
+                $"st_distance(ST_GeomFromText('POINT({longitude} {latitude})',2263), geom) as distance, upVote, downVote, location, round(coalesce((select avg(starrating) from ratings where location_id=bath.id),0)) rating " +
+                $"from public.bathrooms bath " +
                 $"where round(coalesce((select avg(starrating) from ratings where location_id=bath.id),0))={stars} " +
                 $"order by distance" +
                 $"limit {amountBathrooms}";
@@ -350,7 +356,8 @@ namespace WebGIS.Controllers
                     distance = Convert.ToDouble(reader[8]),
                     upVotes = Convert.ToInt32(reader[9]),
                     downVotes = Convert.ToInt32(reader[10]),
-                    location = reader[11].ToString()
+                    location = reader[11].ToString(),
+                    rating = Convert.ToDouble(reader[12])
                 });
             }
             reader.Close();
@@ -362,8 +369,8 @@ namespace WebGIS.Controllers
         {
             string sqlStatement =
                 $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, " +
-                $"st_distance(ST_GeomFromText('POINT({lng} {lat})',2263), geom) as distance, upVote, downVote, location " +
-                $"from public.bathrooms " +
+                $"st_distance(ST_GeomFromText('POINT({lng} {lat})',2263), geom) as distance, upVote, downVote, location, round(coalesce((select avg(starrating) from ratings where location_id=bath.id),0)) rating " +
+                $"from public.bathrooms bath " +
                 $"where st_contains(geom, st_buffer(ST_GeomFromText('POINT({lng} {lat})',2263)))" +
                 $"order by distance";
             List<Location> locations = new List<Location>();
@@ -385,7 +392,8 @@ namespace WebGIS.Controllers
                     distance = Convert.ToDouble(reader[8]),
                     upVotes = Convert.ToInt32(reader[9]),
                     downVotes = Convert.ToInt32(reader[10]),
-                    location = reader[11].ToString()
+                    location = reader[11].ToString(),
+                    rating = Convert.ToDouble(reader[12])
                 });
             }
             reader.Close();
