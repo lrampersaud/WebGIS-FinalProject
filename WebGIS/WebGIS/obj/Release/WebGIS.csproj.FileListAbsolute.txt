@@ -131,7 +131,6 @@ C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\roslyn\v
 C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\roslyn\vbc.rsp
 C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\roslyn\VBCSCompiler.exe
 C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\roslyn\VBCSCompiler.exe.config
-C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\WebGIS.dll.config
 C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\WebGIS.dll
 C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\WebGIS.pdb
 C:\Users\lalchandra\Documents\GIT\WebGIS-FinalProject\WebGIS\WebGIS\bin\Antlr3.Runtime.dll

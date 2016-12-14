@@ -44,9 +44,12 @@ namespace WebGIS.Controllers
         /// Update a rating
         /// </summary>
         /// <param name="rating">rating information</param>
-         [ApiExplorerSettings(IgnoreApi = true)]
-        public void Post([FromBody]Rating rating)
+         [EnableCors(origins: "*", headers: "*", methods: "*")]
+        public bool Post([FromBody]Rating rating)
         {
+            rating.description = HttpUtility.HtmlEncode(rating.description);
+            DataProvider provider = new DataProvider();
+            return provider.InsertRating(rating);
         }
 
         // PUT: api/Ratings/5
