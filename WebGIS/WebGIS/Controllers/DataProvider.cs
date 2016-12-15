@@ -181,6 +181,7 @@ namespace WebGIS.Controllers
             string sqlStatement = $"select id, location_id, description, starrating " +
                                   $"from public.ratings " +
                                   $"where location_id={0}";
+            conn.Open();
             NpgsqlDataReader reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
             while (reader.Read())
             {
@@ -204,6 +205,7 @@ namespace WebGIS.Controllers
             string sqlStatement = $"select id, location_id, description, starrating " +
                                   $"from public.ratings " +
                                   $"where id={0}";
+            conn.Open();
             NpgsqlDataReader reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
             while (reader.Read())
             {
