@@ -180,7 +180,7 @@ namespace WebGIS.Controllers
             List<Rating> ratings = new List<Rating>();
             string sqlStatement = $"select id, location_id, description, starrating " +
                                   $"from public.ratings " +
-                                  $"where location_id={0}";
+                                  $"where location_id={id}";
             conn.Open();
             NpgsqlDataReader reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
             while (reader.Read())
@@ -204,7 +204,7 @@ namespace WebGIS.Controllers
             Rating rating = new Rating();
             string sqlStatement = $"select id, location_id, description, starrating " +
                                   $"from public.ratings " +
-                                  $"where id={0}";
+                                  $"where id={id}";
             conn.Open();
             NpgsqlDataReader reader = SqlDataQueryEngine.ExecuteReader(conn, sqlStatement);
             while (reader.Read())
