@@ -61,7 +61,7 @@ namespace WebGIS.Controllers
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         public bool Put([FromBody]Rating rating)
         {
-            rating.description = HttpUtility.HtmlEncode(rating.description);
+            rating.description = rating.description;
             DataProvider provider = new DataProvider();
             return provider.InsertRating(rating);
         }

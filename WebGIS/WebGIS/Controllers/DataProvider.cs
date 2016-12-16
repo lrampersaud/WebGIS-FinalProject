@@ -33,7 +33,8 @@ namespace WebGIS.Controllers
         {
             string sqlStatement =
                 $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, " +
-                $"st_distance(ST_GeomFromText('POINT({lng} {lat})',2263), geom) as distance, upVote, downVote, location, coalesce((select avg(starrating) from ratings where location_id=bath.id),0) rating " +
+                $"st_distance(ST_GeomFromText('POINT({lng} {lat})',2263), geom) as distance, upVote, downVote, location, " +
+                $"coalesce((select avg(starrating) from ratings where location_id=bath.id),0) rating " +
                 $"from public.bathrooms bath " +
                 $"order by distance limit {count}";
             List<Location> locations = new List<Location>();
@@ -67,7 +68,8 @@ namespace WebGIS.Controllers
         public List<Location> GetAllLocations()
         {
             string sqlStatement =
-                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location, coalesce((select avg(starrating) from ratings where location_id=bath.id),0) rating " +
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location, " +
+                $"coalesce((select avg(starrating) from ratings where location_id=bath.id),0) rating " +
                 $"from public.bathrooms bath";
             List<Location> locations = new List<Location>();
             conn.Open();
@@ -102,7 +104,8 @@ namespace WebGIS.Controllers
         public Location GetBathroom(int id)
         {
             string sqlStatement =
-                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, upVote, downVote, location, coalesce((select avg(starrating) from ratings where location_id=bath.id),0) rating " +
+                $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, upVote, downVote, location, " +
+                $"coalesce((select avg(starrating) from ratings where location_id=bath.id),0) rating " +
                 $"from public.bathrooms bath " +
                 $"where id={id}";
 
@@ -249,15 +252,18 @@ namespace WebGIS.Controllers
 
         public List<Location> GetAllLocationsWithinBoundingBox(BathroomsInBoundingBox entity)
         {
+            double xmin = entity.northEastBoundLongitude > entity.southWestBoundLongitude ? entity.southWestBoundLongitude : entity.northEastBoundLongitude;
+            double xmax = entity.northEastBoundLongitude > entity.southWestBoundLongitude ? entity.northEastBoundLongitude : entity.southWestBoundLongitude ;
+
+
+            double ymin = entity.northEastBoundLatitude > entity.southWestBoundLatitude ? entity.southWestBoundLatitude : entity.northEastBoundLatitude;
+            double ymax = entity.northEastBoundLatitude > entity.southWestBoundLatitude ? entity.northEastBoundLatitude : entity.southWestBoundLatitude;
+
             string sqlStatement =
                 $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location, " +
                 $"coalesce((select avg(starrating) from ratings where location_id=bath.id),0) rating " +
                 $"from public.bathrooms bath " +
-                $"where st_contains(ST_GeomFromText('POLYGON(({entity.northEastBoundLongitude} {entity.northEastBoundLatitude}," +
-                $"{entity.northEastBoundLongitude} {entity.southWestBoundLatitude}," +
-                $"{entity.southWestBoundLongitude} {entity.northEastBoundLatitude}," +
-                $"{entity.southWestBoundLongitude} {entity.southWestBoundLatitude}," +
-                $"{entity.northEastBoundLongitude} {entity.northEastBoundLatitude}))',2263), geom)";
+                $"where st_contains(ST_MakeEnvelope({xmin}, {ymin},{xmax}, {ymax}, 2263), geom)";
             List<Location> locations = new List<Location>();
             conn.Open();
 
@@ -290,16 +296,19 @@ namespace WebGIS.Controllers
 
         public List<Location> GetAllLocationsWithinBoundingBoxByStars(BathroomsInBoundingBox entity, int stars)
         {
+            double xmin = entity.northEastBoundLongitude > entity.southWestBoundLongitude ? entity.southWestBoundLongitude : entity.northEastBoundLongitude;
+            double xmax = entity.northEastBoundLongitude > entity.southWestBoundLongitude ? entity.northEastBoundLongitude : entity.southWestBoundLongitude;
+
+
+            double ymin = entity.northEastBoundLatitude > entity.southWestBoundLatitude ? entity.southWestBoundLatitude : entity.northEastBoundLatitude;
+            double ymax = entity.northEastBoundLatitude > entity.southWestBoundLatitude ? entity.northEastBoundLatitude : entity.southWestBoundLatitude;
+
             string sqlStatement =
                 $"select id, name, latitude, longitude, image, borough, openYearRound, handicap, 0 distance, upVote, downVote, location, " +
                 $"coalesce((select avg(starrating) from ratings where location_id=bath.id),0) rating " +
                 $"from public.bathrooms bath " +
                 $"where round(coalesce((select avg(starrating) from ratings where location_id=bath.id),0))={stars} and " +
-                $"st_contains(ST_GeomFromText('POLYGON(({entity.northEastBoundLongitude} {entity.northEastBoundLatitude}," +
-                $"{entity.northEastBoundLongitude} {entity.southWestBoundLatitude}," +
-                $"{entity.southWestBoundLongitude} {entity.northEastBoundLatitude}," +
-                $"{entity.southWestBoundLongitude} {entity.southWestBoundLatitude}," +
-                $"{entity.northEastBoundLongitude} {entity.northEastBoundLatitude}))',2263), geom) " +
+                $"st_contains(ST_MakeEnvelope({xmin}, {ymin},{xmax}, {ymax}, 2263), geom) " +
                 $"order by stars" +
                 $"limit {entity.amountBathrooms}";
             List<Location> locations = new List<Location>();
